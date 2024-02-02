@@ -1,51 +1,57 @@
-name: Build Swoole
-
-on: [ push ]
-env:
-  ENGINE: 'swoole'
-  SW_VERSION: 'v5.0.2'
-  COMPOSER_VERSION: '2.5.4'
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_ACCESSTOKEN }}
-jobs:
-  build:
-    name: Build PHP ${{ matrix.php-version }} Alpine ${{ matrix.alpine-version }}
-    runs-on: '${{ matrix.os }}'
-    env:
-      ALPINE_VERSION: '${{ matrix.alpine-version }}'
-      PHP_VERSION: '${{ matrix.php-version }}'
-    strategy:
-      matrix:
-        os: [ ubuntu-latest ]
-        alpine-version: [ '3.12', '3.13', '3.14', '3.15', '3.16' ]
-        php-version: [ '8.0', '8.1' ]
-        exclude:
-          - php-version: '8.1'
-            alpine-version: '3.12'
-          - php-version: '8.1'
-            alpine-version: '3.13'
-          - php-version: '8.1'
-            alpine-version: '3.14'
-      max-parallel: 16
-      fail-fast: false
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Fetch the PHP BUILD VERSION
-        id: fetch-php-build-version
-        shell: php {0}
-        run: |
-          <?php
-          $alpineVersion = getenv('ALPINE_VERSION');
-          $phpVersion = getenv('PHP_VERSION');
-          if ($phpVersion == '8.1' && in_array($alpineVersion, ['3.16'])) {
-              $version = '81';
-          } else {
-              $version = substr($phpVersion, 0, 1);
-          }
-          echo "::set-output name=version::" . $version . PHP_EOL;
-      - name: Build
-        run: export PHP_BUILD_VERSION=${{ steps.fetch-php-build-version.outputs.version }} && docker-compose build alpine-swoole
-      - name: Push Images to Docker Hub
-        if: ${{ github.ref == 'refs/heads/build'}}
-        run: ./.github/workflows/push.sh
+#name: Build Swoole
+#
+#on: [ push ]
+#env:
+#  ENGINE: 'swoole'
+#  SW_VERSION: 'v5.0.2'
+#  COMPOSER_VERSION: '2.5.4'
+#  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_ACCESSTOKEN }}
+#jobs:
+#  build:
+#    name: Build PHP ${{ matrix.php-version }} Alpine ${{ matrix.alpine-version }}
+#    runs-on: '${{ matrix.os }}'
+#    env:
+#      ALPINE_VERSION: '${{ matrix.alpine-version }}'
+#      PHP_VERSION: '${{ matrix.php-version }}'
+#    strategy:
+#      matrix:
+#        os: [ ubuntu-latest ]
+#        alpine-version: [ '3.12', '3.13', '3.14', '3.15', '3.16' ]
+#        php-version: [ '7.4' ]
+#        exclude:
+#          - php-version: '8.1'
+#            alpine-version: '3.12'
+#          - php-version: '8.1'
+#            alpine-version: '3.13'
+#          - php-version: '8.1'
+#            alpine-version: '3.14'
+#      max-parallel: 16
+#      fail-fast: false
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v3
+#      - name: Fetch the PHP BUILD VERSION
+#        id: fetch-php-build-version
+#        shell: php {0}
+#        run: |
+#          <?php
+#          $alpineVersion = getenv('ALPINE_VERSION');
+#          $phpVersion = getenv('PHP_VERSION');
+#          if ($phpVersion == '8.1' && in_array($alpineVersion, ['3.16'])) {
+#              $version = '81';
+#          } else {
+#              $version = substr($phpVersion, 0, 1);
+#          }
+#          echo "::set-output name=version::" . $version . PHP_EOL;
+#      - name: Log in to GitHub Container Registry
+#        uses: docker/login-action@v1
+#        with:
+#          registry: ghcr.io
+#          username: ${{ github.repository_owner }}
+#          password: ${{ secrets.ACCESS_TOKEN }} # 你的个人访问令牌
+#      - name: Build and push
+#        if: ${{ github.event.inputs.event == 'publish' }}
+#        run: |
+#          cd build
+#          docker buildx build . --file Dockerfile --tag ghcr.io/hyperf:${{ matrix.php-version }}-alpine-v${{ matrix.alpine-version }}-swoole --platform linux/amd64,linux/arm64  --push

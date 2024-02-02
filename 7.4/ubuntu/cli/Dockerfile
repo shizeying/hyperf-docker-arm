@@ -7,7 +7,7 @@
 
 ARG UBUNTU_VERSION
 
-FROM hyperf/hyperf:7.4-ubuntu-v${UBUNTU_VERSION}-base
+FROM ghcr.io/hyperf:7.4-ubuntu-v${UBUNTU_VERSION}-base
 
 LABEL maintainer="Hyperf Developers <group@hyperf.io>" version="1.0" license="MIT"
 
