@@ -10,14 +10,14 @@ env:
 jobs:
   build:
     name: Build PHP ${{ matrix.php-version }} Alpine ${{ matrix.alpine-version }}
-    runs-on: '${{ matrix.os }}'
+    runs-on: 'ubuntu-latest'
     env:
       ALPINE_VERSION: '${{ matrix.alpine-version }}'
       PHP_VERSION: '${{ matrix.php-version }}'
     strategy:
       matrix:
         os: [ ubuntu-latest ]
-        alpine-version: [ '3.12', '3.13', '3.14', '3.15', '3.16' ]
+        alpine-version: [ '3.13', '3.14', '3.15', '3.16', '3.17'  ]
         php-version: [ '7.4' ]
         exclude:
           - php-version: '7.4'
