@@ -63,6 +63,6 @@ jobs:
           docker buildx build \
             --build-arg ALPINE_VERSION=${{ matrix.alpine-version }} \
             --file ${{ env.PHP_VERSION }}/alpine/base/Dockerfile \
-            --tag ghcr.io/hyperf:${{ matrix.php-version }}-alpine-v${{ matrix.alpine-version }}-base \
+            --tag ghcr.io/${{ github.repository_owner }}/hyperf:${{ matrix.php-version }}-alpine-v${{ matrix.alpine-version }}-base \
             --platform linux/amd64,linux/arm64 \
             --push .
