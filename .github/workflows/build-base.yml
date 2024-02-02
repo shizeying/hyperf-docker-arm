@@ -56,9 +56,6 @@ jobs:
               $dockerfile = 'alpine-origin-base';
           }
           echo "::set-output name=dockerfile::" . $dockerfile . PHP_EOL;
-      - name: Build
-        run: |
-          docker-compose build ${{ steps.fetch-dockerfile.outputs.dockerfile }}
 
 
       - name: Build and Push Docker image
@@ -67,5 +64,5 @@ jobs:
             --build-arg ALPINE_VERSION=${{ matrix.alpine-version }} \
             --file ${{ env.PHP_VERSION }}/alpine/base/Dockerfile \
             --tag ghcr.io/hyperf:${{ matrix.php-version }}-alpine-v${{ matrix.alpine-version }}-base \
-            --platform linux/amd64 \
+            --platform linux/amd64,linux/arm64 \
             --push .

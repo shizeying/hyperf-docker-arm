@@ -19,12 +19,17 @@ ADD https://alpine-apk-repository.knowyourself.cc/php-alpine.rsa.pub /etc/apk/ke
 ##
 # ---------- building ----------
 ##
+RUN apk --update-cache add ca-certificates
+
+# CONFIGURE ALPINE REPOSITORIES AND PHP BUILD DIR.
+RUN echo "http://dl-cdn.alpinelinux.org/alpine/v${ALPINE_VERSION}/main" > /etc/apk/repositories && \
+    echo "http://dl-cdn.alpinelinux.org/alpine/v${ALPINE_VERSION}/community" >> /etc/apk/repositories
+
+RUN apk add --update-cache \
+    php
+RUN apk update
 RUN set -ex \
-    # change apk source repo
-    && echo "https://alpine-apk-repository.knowyourself.cc/v$ALPINE_VERSION/php-7.4" >> /etc/apk/repositories \
-    && echo "@php https://alpine-apk-repository.knowyourself.cc/v$ALPINE_VERSION/php-7.4" >> /etc/apk/repositories \
-    && apk update \
-    && apk add --no-cache \
+     apk add --no-cache \
     # Install base packages ('ca-certificates' will install 'nghttp2-libs')
     ca-certificates \
     curl \
@@ -61,7 +66,7 @@ RUN set -ex \
     php7-xml \
     php7-xmlreader \
     php7-pcntl \
-    php7-opcache \
+    php7-opcache    \
     && ln -sf /usr/bin/php7 /usr/bin/php \
     && apk del --purge *-dev \
     && rm -rf /var/cache/apk/* /tmp/* /usr/share/man /usr/share/php7 \
