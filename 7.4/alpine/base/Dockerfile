@@ -73,3 +73,11 @@ RUN set -ex \
     && php -v \
     && php -m \
     && echo -e "\033[42;37m Build Completed :).\033[0m\n"
+
+
+# update
+RUN set -ex \
+    && apk update \
+    # for swoole extension libaio linux-headers
+    && apk add --no-cache libstdc++ openssl git bash \
+    && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS libaio-dev openssl-dev curl-dev
