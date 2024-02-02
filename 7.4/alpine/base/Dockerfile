@@ -24,9 +24,9 @@ RUN apk --update-cache add ca-certificates
 # CONFIGURE ALPINE REPOSITORIES AND PHP BUILD DIR.
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/v${ALPINE_VERSION}/main" > /etc/apk/repositories && \
     echo "http://dl-cdn.alpinelinux.org/alpine/v${ALPINE_VERSION}/community" >> /etc/apk/repositories
-
-RUN apk add --update-cache \
-    php
+ENV PHPIZE_DEPS="autoconf dpkg-dev dpkg file g++ gcc libc-dev make php7-dev php7-pear pkgconf re2c pcre-dev pcre2-dev zlib-dev libtool automake"
+RUN apk add --update-cache --virtual .build-deps $PHPIZE_DEPS libaio-dev openssl-dev curl-dev  \
+    php  libstdc++ openssl git bash libaio-dev openssl-dev curl-dev autoconf dpkg-dev dpkg file g++ gcc libc-dev make php7-dev php7-pear pkgconf re2c pcre-dev pcre2-dev zlib-dev libtool automake
 RUN apk update
 RUN set -ex \
      apk add --no-cache \
