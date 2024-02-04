@@ -88,19 +88,18 @@ jobs:
               -H "Accept: application/vnd.github.v3+json" \
               "https://api.github.com/user/packages/container/your-repository-name/versions")
 
-          # Parse the list and find dangling images (those with an empty tags array)
+          echo "Image versions: $IMAGE_VERSIONS"
+
+          # Parse the list and find dangling images
           DANGLING_IMAGES=$(echo "$IMAGE_VERSIONS" | jq -r '.[] | select(.metadata.container.tags | length == 0) | .id')
 
-          # Check if there are dangling images to delete
-          if [ -z "$DANGLING_IMAGES" ]; then
-            echo "No dangling images to delete."
-          else
-            # Delete each dangling image
-            for IMAGE_ID in $DANGLING_IMAGES
-            do
-              echo "Deleting image version with ID: $IMAGE_ID"
-              curl -X DELETE -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                   -H "Accept: application/vnd.github.v3+json" \
-                   "https://api.github.com/user/packages/container/your-repository-name/versions/$IMAGE_ID"
-            done
-          fi
+          echo "Dangling image IDs: $DANGLING_IMAGES"
+
+          # Delete each dangling image
+          for IMAGE_ID in $DANGLING_IMAGES
+          do
+            echo "Deleting image version with ID: $IMAGE_ID"
+            curl -X DELETE -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                 -H "Accept: application/vnd.github.v3+json" \
+                 "https://api.github.com/user/packages/container/your-repository-name/versions/$IMAGE_ID"
+          done
