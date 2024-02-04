@@ -7,7 +7,7 @@
 
 ARG ALPINE_VERSION
 
-FROM ghcr.io/shizeying/hyperf/hyperf:8.0-alpine-v${ALPINE_VERSION}-base
+FROM ghcr.io/shizeying/hyperf:8.0-alpine-v${ALPINE_VERSION}-base
 
 LABEL maintainer="Hyperf Developers <group@hyperf.io>" version="1.0" license="MIT"
 
