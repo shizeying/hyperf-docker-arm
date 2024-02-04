@@ -98,5 +98,5 @@ jobs:
             echo "Deleting image version with ID: $IMAGE_ID"
             curl -X DELETE -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
                  -H "Accept: application/vnd.github.v3+json" \
-                 "https://api.github.com/user/packages/container/your-repository-name/versions/$IMAGE_ID"
+                 "https://api.github.com/user/packages/container/hyperf/versions/$IMAGE_ID"
           done
