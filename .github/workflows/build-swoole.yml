@@ -88,15 +88,19 @@ jobs:
               -H "Accept: application/vnd.github.v3+json" \
               "https://api.github.com/user/packages/container/your-repository-name/versions")
 
-          # This is just a simple example of how you might parse the list to find image versions you want to delete.
-          # You'll need to adjust this to fit your specific criteria for what constitutes a "dangling" image.
+          # Parse the list and find dangling images (those with an empty tags array)
           DANGLING_IMAGES=$(echo "$IMAGE_VERSIONS" | jq -r '.[] | select(.metadata.container.tags | length == 0) | .id')
 
-          # Delete each dangling image
-          for IMAGE_ID in $DANGLING_IMAGES
-          do
-            echo "Deleting image version with ID: $IMAGE_ID"
-            curl -X DELETE -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                 -H "Accept: application/vnd.github.v3+json" \
-                 "https://api.github.com/user/packages/container/hyperf/versions/$IMAGE_ID"
-          done
+          # Check if there are dangling images to delete
+          if [ -z "$DANGLING_IMAGES" ]; then
+            echo "No dangling images to delete."
+          else
+            # Delete each dangling image
+            for IMAGE_ID in $DANGLING_IMAGES
+            do
+              echo "Deleting image version with ID: $IMAGE_ID"
+              curl -X DELETE -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                   -H "Accept: application/vnd.github.v3+json" \
+                   "https://api.github.com/user/packages/container/your-repository-name/versions/$IMAGE_ID"
+            done
+          fi
