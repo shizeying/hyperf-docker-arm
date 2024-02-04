@@ -121,6 +121,9 @@ RUN  apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/v$ALPI
          php7-xsl \
          php7-tokenizer \
           php7-session
+RUN wget http://pear.php.net/go-pear.phar \
+    && php go-pear.phar 
+
 
 # update
 RUN set -ex \
