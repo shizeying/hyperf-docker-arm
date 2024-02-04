@@ -1,4 +1,4 @@
-name: Build Swoole
+name: 清除悬空镜像
 
 on: [ push ]
 env:
