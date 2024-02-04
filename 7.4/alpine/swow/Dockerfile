@@ -31,19 +31,16 @@ RUN set -ex \
     # download
     && cd /tmp \
     && curl -SL "https://github.com/swow/swow/archive/${SW_VERSION}.tar.gz" -o swow.tar.gz \
-    && ls -alh \
     # php extension:swow
     && cd /tmp \
     && mkdir -p swow \
     && tar -xf swow.tar.gz -C swow --strip-components=1 \
     && ln -s /usr/bin/phpize7 /usr/local/bin/phpize \
     && ln -s /usr/bin/php-config7 /usr/local/bin/php-config \
-    && ( \
-        cd swow/ext \
+    && cd swow/ext \
         && phpize \
         && ./configure --enable-swow --enable-swow-ssl --enable-swow-curl \
         && make -s -j$(nproc) && make install \
-    ) \
     && echo "memory_limit=1G" > /etc/php7/conf.d/00_default.ini \
     && echo "opcache.enable_cli = 'On'" >> /etc/php7/conf.d/00_opcache.ini \
     && echo "extension=swow.so" > /etc/php7/conf.d/50_swow.ini \

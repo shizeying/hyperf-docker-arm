@@ -19,10 +19,10 @@ ADD https://alpine-apk-repository.knowyourself.cc/php-alpine.rsa.pub /etc/apk/ke
 ##
 # ---------- building ----------
 ##
+RUN echo "http://dl-cdn.alpinelinux.org/alpine/v$ALPINE_VERSION/main" > /etc/apk/repositories && \
+    echo "http://dl-cdn.alpinelinux.org/alpine/v$ALPINE_VERSION/community" >> /etc/apk/repositories
 RUN set -ex \
     # change apk source repo
-    && echo "https://alpine-apk-repository.knowyourself.cc/v$ALPINE_VERSION/php-8.0" >> /etc/apk/repositories \
-    && echo "@php https://alpine-apk-repository.knowyourself.cc/v$ALPINE_VERSION/php-8.0" >> /etc/apk/repositories \
     && apk update \
     && apk add --no-cache \
     # Install base packages ('ca-certificates' will install 'nghttp2-libs')
@@ -61,6 +61,25 @@ RUN set -ex \
     php8-xmlreader \
     php8-pcntl \
     php8-opcache \
+    php8-dev \
+    php8-json \
+    php8-xmlreader\
+    php8-xmlwriter \
+    php8-bz2 \
+    php8-calendar \
+    php8-pecl-event \
+    php8-fileinfo \
+    php8-ftp \
+    php8-gettext \
+    php8-intl \
+    php8-mysqli \
+    php8-shmop \
+    php8-sqlite3 \
+    php8-soap \
+    php8-simplexml \
+    php8-xsl \
+    php8-tokenizer \
+    php8-session \
     && ln -sf /usr/bin/php8 /usr/bin/php \
     && apk del --purge *-dev \
     && rm -rf /var/cache/apk/* /tmp/* /usr/share/man /usr/share/php8 \
