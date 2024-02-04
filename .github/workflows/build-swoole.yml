@@ -98,7 +98,7 @@ jobs:
           # Delete each dangling image
           for IMAGE_ID in $DANGLING_IMAGES
           do
-            echo "Deleting image version with ID: $IMAGE_ID"
+            echo "Deleting image version with ID: $IMAGE_ID \n https://api.github.com/user/packages/container/hyperf/versions/$IMAGE_ID"
             curl -X DELETE -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
                  -H "Accept: application/vnd.github.v3+json" \
                  "https://api.github.com/user/packages/container/hyperf/versions/$IMAGE_ID"
