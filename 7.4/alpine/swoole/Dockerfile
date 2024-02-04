@@ -21,9 +21,9 @@ ENV SW_VERSION=${SW_VERSION:-"v4.8.11"} \
     COMPOSER_VERSION=${COMPOSER_VERSION:-"2.6.6"} \
     #  install and remove building packages
     PHPIZE_DEPS="autoconf dpkg-dev dpkg file g++ gcc libc-dev make php7-dev php7-pear pkgconf re2c pcre-dev pcre2-dev zlib-dev libtool automake"
-RUN apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/v3.15/community/ php7-pecl-mongodb
+RUN apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/v$ALPINE_VERSION/community/ php7-pecl-mongodb
 #RUN pecl install mongodb
-RUN  apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/v3.15/community/ \
+RUN  apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/v$ALPINE_VERSION/community/ \
          curl \
          php7-dev \
          php7-iconv \

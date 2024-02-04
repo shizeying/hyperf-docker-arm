@@ -73,9 +73,9 @@ RUN set -ex \
     && php -v \
     && php -m \
     && echo -e "\033[42;37m Build Completed :).\033[0m\n"
-RUN apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/v3.15/community/ php7-pecl-mongodb
+RUN apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/v$ALPINE_VERSION/community/ php7-pecl-mongodb
 #RUN pecl install mongodb
-RUN  apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/v3.15/community/ \
+RUN  apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/v$ALPINE_VERSION/community/ \
          curl \
          php7-dev \
          php7-iconv \
